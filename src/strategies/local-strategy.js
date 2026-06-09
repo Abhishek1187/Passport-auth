@@ -1,25 +1,38 @@
 import passport from 'passport';
-import {strategy} from 'passport-local';
-import {mockUsers} from './mockUsers.js';
+import { Strategy } from 'passport-local';
+import { mockUsers } from '../mockUsers.js';
 
+passport.serializeUser((user, done) => {
+    console.log('Serializing user:', user);
+    done(null, user.id);
+});
 
-passport.use(
-   new strategy ((username , password , done) =>{
-    console.log(`Username: ${username}`)
-    console.log(`Password: ${password}`)
+passport.deserializeUser((id, done) => {
+    console.log('Deserializing user id:', id);
     try {
-      const findone = mockUsers.find((user) => user.username === username);
-    if(!findone) throw new Error ("email invalid")
-      if(findone.passoword !== password)
-      throw new error("invalid credentials ");
-      done(null , findone);
+        const findUser = mockUsers.find((user) => user.id === id);
+        if (!findUser) {
+            throw new Error('User not found');
+        }
+        done(null, findUser);
     } catch (err) {
-      done(err , null);
-      
+        done(err, null);
     }
-    
-  
+});
 
+export default passport.use(
+   new Strategy ((username , password , done) =>{
+    console.log(`username: ${username}`)
+    console.log(`password: ${password}`)
+    try {
+      const findUser = mockUsers.find((user) => user.name === username);
+      if(!findUser) return done(null, false, { message: "User not found" });
 
+      if(findUser.password !== password) return done(null, false, { message: "Invalid credentials" });
+      
+      return done(null , findUser);
+    } catch (err) {
+      return done(err , false);
+    }
    }) 
 )

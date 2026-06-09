@@ -4,6 +4,7 @@ import messageRoutes from './src/routes/message.routes.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
+import './src/strategies/local-strategy.js';
 
 
 const app = express();
@@ -14,7 +15,7 @@ app.use(cookieParser());
 app.use(
     session({
         secret : "anson dev",
-        saveinitialized : true,
+        saveUninitialized : true,
         resave : false,
         cookie: {
             maxAge: 60000 * 60,
