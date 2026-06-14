@@ -1,13 +1,18 @@
 import express from 'express';
 import authRoutes from './src/routes/auth.routes.js';
-import messageRoutes from './src/routes/message.routes.js';
+import messageRoutes from './src/routes/messages.routes.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import passport from 'passport';
 import './src/strategies/local-strategy.js';
-
+import mongoose from 'mongoose';
 
 const app = express();
+
+mongoose.connect("mongodb://localhost:27017")
+.then(()=> console.log("connected to Database"))
+.catch((err)=> console.log(err));
+
 
 
 app.use(express.json());
