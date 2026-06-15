@@ -36,6 +36,7 @@ app.use(passport.session());
  
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+//app.use("/api/users" , users);
 
 
 app.listen(PORT , () => {
